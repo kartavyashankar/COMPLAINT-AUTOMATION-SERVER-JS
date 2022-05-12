@@ -1,0 +1,30 @@
+{
+  "name": "complaint-automation-application",
+  "version": "1.0.0",
+  "description": "It is an application to automate Compliant Management System at CRPF Camp, Ranchi",
+  "main": "src/main/server.js",
+  "scripts": {
+    "test": "node src/main/js/server.js",
+    "start": "node src/main/js/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kartavyashankar/COMPLAINT-AUTOMATION-SERVER-JS.git"
+  },
+  "author": "Harsh Parmar, Navdeep Singh, Ashish Chouhan, Anshul Pandey, Kartavya Shankar",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/kartavyashankar/COMPLAINT-AUTOMATION-SERVER-JS/issues"
+  },
+  "homepage": "https://github.com/kartavyashankar/COMPLAINT-AUTOMATION-SERVER-JS#readme",
+  "devDependencies": {
+    "install": "^0.13.0",
+    "nodemon": "^2.0.16",
+    "npm": "^8.10.0"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "http": "^0.0.1-security",
+    "socket.io": "^4.5.0"
+  }
+}
