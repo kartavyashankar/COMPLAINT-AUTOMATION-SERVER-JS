@@ -33,7 +33,7 @@ class complaintDto {
     getForceNumber() {
         return this.forceNumber;
     }
-    setCategory() {
+    getCategory() {
         return this.category;
     }
     getRegistrationDate() {
