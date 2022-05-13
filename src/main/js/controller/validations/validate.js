@@ -14,8 +14,7 @@ const postComplaint = (data) => {
 		forceNumber: Joi.number().positive().required(),
 		quarterNumber: Joi.number().positive().required(),
 		category: Joi.number().positive().required(),
-		complaint: Joi.string().required(),
-		status: Joi.number()
+		complaint: Joi.string().required()
 	});
 	validSchema.validate(data);
 };
