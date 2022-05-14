@@ -1,5 +1,18 @@
 const Joi = require("@hapi/joi");
 
+const registerValidation = (data) => {
+	const validSchema = Joi.object({
+		name: Joi.string().required(),
+		forceNumber: Joi.number().positive().required(),
+		password: Joi.string().min(6).required(),
+		unit: Joi.string().required(),
+		designation: Joi.string().required(),
+		quarterType: Joi.number().required(),
+		quarterNumber: Joi.number().required()
+	});
+	validSchema.validate(data);
+};
+
 const loginValidation = (data) => {
 	const validSchema = Joi.object({
 		forceNumber: Joi.number().positive().required(),
@@ -43,6 +56,7 @@ const updateFeedback = (data) => {
 };
 
 module.exports({
+	registerValidation: registerValidation,
     loginValidation: loginValidation,
 	postComplaint: postComplaint,
 	updateComplaint: updateComplaint,

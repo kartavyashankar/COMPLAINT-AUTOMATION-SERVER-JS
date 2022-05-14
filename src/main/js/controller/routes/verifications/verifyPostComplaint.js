@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
+const User = require("../../../models/user");
+const app_prop = require("../../../../res/app-properties")
 
 module.exports = async function (req, res, next) {
 	const token = req.header("auth-token");
@@ -7,7 +8,7 @@ module.exports = async function (req, res, next) {
 		return res.status(400).json({ message: "Invalid Token!!" });
 	}
 	try {
-		const verification = jwt.verify(token, process.env.TOKEN_SECRET);
+		const verification = jwt.verify(token, app_prop.TOKEN_SECRET);
 		const user = await User.findOne({ forceNumber: verification.forceNumber });
 		if (verification.userId === req.body.forceNumber && user) {
 			next();

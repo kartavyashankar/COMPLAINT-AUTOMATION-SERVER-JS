@@ -9,10 +9,12 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-//const postsRoute = require("./routes/posts");
+const userRoute = require("./controller/routes/userRoute");
+const complaintRoute = require("");
 
 // Middlewares
-//app.use("/api/v1.0", authRoute);
+app.use("/user", userRoute);
+app.use("/user/complaint", complaintRoute);
 
 // CONNECT TO DB
 mongoose.connect(
