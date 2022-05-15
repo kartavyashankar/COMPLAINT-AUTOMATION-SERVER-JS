@@ -10,7 +10,7 @@ const registerValidation = (data) => {
 		quarterType: Joi.number().required(),
 		quarterNumber: Joi.number().required()
 	});
-	validSchema.validate(data);
+	return validSchema.validate(data);
 };
 
 const loginValidation = (data) => {
@@ -29,7 +29,7 @@ const postComplaint = (data) => {
 		category: Joi.number().positive().required(),
 		complaint: Joi.string().required()
 	});
-	validSchema.validate(data);
+	return validSchema.validate(data);
 };
 
 // reset status from cancelled to Pending for review
@@ -38,19 +38,31 @@ const updateComplaint = (data) => {
 		complaintNumber: Joi.number().positive().required(),
 		complaint: Joi.string().required()
 	});
-	validSchema.validate(data);
+	return validSchema.validate(data);
 };
 
 const updateComplaintStatus = (data) => {
 	const validSchema = Joi.object({
-		status: Joi.number.required()
+		complaintNumber : Joi.number().positive().required(),
+		status: Joi.number.required(),
+		forceNumber: Joi.number().positive().required() 
 	});
 	return validSchema.validate(data);
 };
 
 const updateFeedback = (data) => {
 	const validSchema = Joi.object({
-		feedbackRating: Joi.number().greater(-1).less(6).required()
+		feedbackRating: Joi.number().greater(-1).less(6).required(),
+		forceNumber: Joi.number().positive().required(),
+		complaintNumber: Joi.number().positive().required()
+	});
+	return validSchema.validate(data);
+};
+
+const updateComplaintHandler = (data) => {
+	const validSchema = Joi.object({
+		forceNumber: Joi.number().positive().required(),
+		complaintNumber: Joi.number().positive().required()
 	});
 	return validSchema.validate(data);
 };
@@ -61,5 +73,6 @@ module.exports = {
 	postComplaint: postComplaint,
 	updateComplaint: updateComplaint,
 	updateComplaintStatus: updateComplaintStatus,
-	updateFeedback: updateFeedback
+	updateFeedback: updateFeedback,
+	updateComplaintHandler: updateComplaintHandler
 };
