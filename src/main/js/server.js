@@ -8,15 +8,12 @@ app.use(cors());
 
 app.use(express.json());
 
-// Routes
 const userRoute = require("./controller/routes/userRoute");
-const complaintRoute = require("");
+const complaintRoute = require("./controller/routes/complaintRoute");
 
-// Middlewares
 app.use("/user", userRoute);
 app.use("/user/complaint", complaintRoute);
 
-// CONNECT TO DB
 mongoose.connect(
 	app_prop.DB_CONNECT,
 	{

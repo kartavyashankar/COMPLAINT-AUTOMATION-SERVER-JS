@@ -55,11 +55,11 @@ const updateFeedback = (data) => {
 	return validSchema.validate(data);
 };
 
-module.exports({
+module.exports = {
 	registerValidation: registerValidation,
     loginValidation: loginValidation,
 	postComplaint: postComplaint,
 	updateComplaint: updateComplaint,
 	updateComplaintStatus: updateComplaintStatus,
 	updateFeedback: updateFeedback
-});
+};

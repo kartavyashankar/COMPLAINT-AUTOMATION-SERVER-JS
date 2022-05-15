@@ -12,9 +12,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 router.post("/register", async (req, res) => {
-	const { error } = registerValidation(req.body);
-	if (error)
-		return res.status(400).json({ message: error.details[0].message });
+	//const { error } = registerValidation(req.body);
+	//if (error)
+	//	return res.status(400).json({ message: error.details[0].message });
 	try {
 		const forceNumExist = await User.findOne({ forceNumber: req.body.forceNumber });
 		if (forceNumExist) {
@@ -25,7 +25,6 @@ router.post("/register", async (req, res) => {
 
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
 		const user = new User({
 			name: req.body.name,
 			forceNumber: req.body.forceNumber,
@@ -74,6 +73,18 @@ router.get("/login", async (req, res) => {
 		});
 	} catch (err) {
 		res.status(500).json({ message: err });
+	}
+});
+
+router.get("/", async (req, res) => {
+	try {
+		const user = await  User.find({});
+		console.log(user);
+		res.status(200).json({"msg":"all data logged in console"});
+	}
+	catch (err) {
+		console.log(err);
+		res.status(500).json({});
 	}
 });
 
