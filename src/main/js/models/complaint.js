@@ -26,15 +26,9 @@ const complaintSchema = mongoose.Schema(
             type: String,
 			default: Date.now
         },
-        handler : {
-            type: String,
-            default: "SO",
-            required: true
-        },
         status : {
             type: Number,
-            default: 0,
-            required: true
+            default: 1
         },
         resolutionDate : {
             type: String

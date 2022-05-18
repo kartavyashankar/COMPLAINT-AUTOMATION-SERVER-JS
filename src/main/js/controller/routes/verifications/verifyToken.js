@@ -9,7 +9,7 @@ module.exports = async function (req, res, next) {
 	}
 	try {
 		const verification = jwt.verify(token, app_prop.TOKEN_SECRET);
-		const user = await User.findOne({ userId: verification.userId });
+		const user = await User.findOne({ forceNumber: verification.forceNumber });
 		if (user) next();
 		else {
 			res.status(401).json({ message: "Access Denied!!" });

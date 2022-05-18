@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema(
 			required: true
 		},
 		forceNumber: {
-			type: Number,
+			type: String,
 			required: true
 		},
         password: {
@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema(
         quarterNumber: {
             type: Number,
             required: true
-        }
+        },
 	},
 	{ versionKey: false }
 );

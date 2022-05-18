@@ -18,11 +18,9 @@ mongoose.connect(
 	app_prop.DB_CONNECT,
 	{
 		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		useCreateIndex: true,
-	},
-	() => console.log("Connected to DB!")
-);
+		useUnifiedTopology: true
+	}
+).then(() => console.log("Connected to DB!"));
 
 const PORT = app_prop.PORT;
-app.listen(PORT, () => console.log(`\nServer running on port ${PORT}`));
+app.listen(process.env.PORT || PORT, () => console.log(`\nServer running on port ${PORT}`));

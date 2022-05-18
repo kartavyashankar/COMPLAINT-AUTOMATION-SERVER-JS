@@ -6,21 +6,21 @@ const app_prop = require("../../../res/app-properties")
 const {
 	registerValidation,
 	loginValidation
-} = require("../../controller/routes/validations/validate");
+} = require("./validations/validate");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 router.post("/register", async (req, res) => {
-	//const { error } = registerValidation(req.body);
-	//if (error)
-	//	return res.status(400).json({ message: error.details[0].message });
+	const { error } = registerValidation(req.body);
+	if (error)
+		return res.status(400).json({ message: error.details[0].message });
 	try {
-		const forceNumExist = await User.findOne({ forceNumber: req.body.forceNumber });
-		if (forceNumExist) {
+		const userExist = await User.findOne({ forceNumber: req.body.forceNumber });
+		if (userExist) {
 			return res
 				.status(409)
-				.json({ message: "Force No already registered with us!!" });
+				.json({ message: "USER_ALREADY_REGISTERED!!" });
 		}
 
 		const salt = await bcrypt.genSalt(10);
@@ -36,7 +36,7 @@ router.post("/register", async (req, res) => {
 		});
 		const saveUser = await user.save();
 		res.status(201).json({
-			message: user.userId + "Successfully Registered!!",
+			message: "Successfully Registered!!",
 		});
 	} catch (err) {
 		res.status(500).json({ message: err });
@@ -57,6 +57,7 @@ router.get("/login", async (req, res) => {
 			req.body.password,
 			user.password
 		);
+
 		if (!validPass) {
 			return res.status(400).json({ message: "Invalid Password!!" });
 		}
@@ -73,18 +74,6 @@ router.get("/login", async (req, res) => {
 		});
 	} catch (err) {
 		res.status(500).json({ message: err });
-	}
-});
-
-router.get("/", async (req, res) => {
-	try {
-		const user = await  User.find({});
-		console.log(user);
-		res.status(200).json({"msg":"all data logged in console"});
-	}
-	catch (err) {
-		console.log(err);
-		res.status(500).json({});
 	}
 });
 
