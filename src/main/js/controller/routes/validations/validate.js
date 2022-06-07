@@ -23,18 +23,9 @@ const loginValidation = (data) => {
 
 const postComplaint = (data) => {
 	const validSchema = Joi.object({
-		complaintNumber: Joi.number().positive().required(),
 		forceNumber: Joi.string().required(),
-		quarterNumber: Joi.number().positive().required(),
-		category: Joi.number().positive().required(),
+		category: Joi.string().required(),
 		complaint: Joi.string().required()
-	});
-	return validSchema.validate(data);
-};
-
-const getComplaint = (data) => {
-	const validSchema = Joi.object({
-		forceNumber: Joi.string().required()
 	});
 	return validSchema.validate(data);
 };
@@ -78,7 +69,6 @@ module.exports = {
 	registerValidation: registerValidation,
     loginValidation: loginValidation,
 	postComplaint: postComplaint,
-	getComplaint: getComplaint,
 	updateComplaint: updateComplaint,
 	fwd_auth_Complaint: fwd_auth_Complaint,
 	rejectComplaint: rejectComplaint,

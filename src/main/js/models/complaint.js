@@ -3,11 +3,10 @@ const mongoose = require("mongoose");
 const complaintSchema = mongoose.Schema(
 	{
 		complaintNumber: {
-			type: Number,
-			required: true  
+			type: Number
 		},
         forceNumber: {
-            type: Number,
+            type: String,
             required: true
         },
 		quarterNumber: {
@@ -15,7 +14,7 @@ const complaintSchema = mongoose.Schema(
 			required: true
 		},
         category: {
-            type: Number,
+            type: String,
             required: true
         },
         complaint: {
@@ -23,7 +22,7 @@ const complaintSchema = mongoose.Schema(
 			required: true
 		},
         registrationDate: {
-            type: String,
+            type: Date,
 			default: Date.now
         },
         status : {
@@ -31,7 +30,7 @@ const complaintSchema = mongoose.Schema(
             default: 1
         },
         resolutionDate : {
-            type: String
+            type: Date
         },
         reasonOfCancellation: {
             type: String
