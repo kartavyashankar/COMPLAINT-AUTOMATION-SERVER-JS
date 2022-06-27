@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
-const app_prop = require("../res/app-properties")
+const app_prop = require("../res/app-properties");
+const swaggerUI = require("swagger-ui-express");
+const docs = require("./docs");
 
 app.use(cors());
 
@@ -13,6 +15,7 @@ const complaintRoute = require("./controller/routes/complaintRoute");
 
 app.use("/user", userRoute);
 app.use("/user/complaint", complaintRoute);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(docs));
 
 mongoose.connect(
 	app_prop.DB_CONNECT,
