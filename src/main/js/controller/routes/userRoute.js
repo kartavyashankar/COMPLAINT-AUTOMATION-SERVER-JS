@@ -70,7 +70,8 @@ router.post("/login", async (req, res) => {
 		res.status(200).json({
 			message: "Login Successful!!",
 			forceNumber: user.forceNumber,
-			TOKEN: token,
+			designation: user.designation,
+			TOKEN: token
 		});
 	} catch (err) {
 		res.status(500).json({ message: err });

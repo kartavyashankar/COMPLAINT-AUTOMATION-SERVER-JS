@@ -30,35 +30,24 @@ const postComplaint = (data) => {
 	return validSchema.validate(data);
 };
 
-const updateComplaint = (data) => {
+const authComplaint = (data) => {
 	const validSchema = Joi.object({
-		complaintNumber: Joi.number().positive().required(),
-		complaint: Joi.string().required(),
-		forceNumber: Joi.string().required()
-	});
-	return validSchema.validate(data);
-};
-
-const fwd_auth_Complaint = (data) => {
-	const validSchema = Joi.object({
+		forceNumber: Joi.string().required(),
 		complaintNumber : Joi.number().positive().required(),
-		forceNumber: Joi.string().required() 
 	});
 	return validSchema.validate(data);
 };
 
 const rejectComplaint = (data) => {
 	const validSchema = Joi.object({
-		complaintNumber : Joi.number().positive().required(),
 		forceNumber: Joi.string().required(),
-		reasonOfCancellation: Joi.string().required()
+		complaintNumber : Joi.number().positive().required(),
 	});
 	return validSchema.validate(data);
 };
 
-const updateFeedback = (data) => {
+const resolveComplaint = (data) => {
 	const validSchema = Joi.object({
-		feedbackRating: Joi.number().greater(-1).less(6).required(),
 		forceNumber: Joi.string().required(),
 		complaintNumber: Joi.number().positive().required()
 	});
@@ -69,8 +58,7 @@ module.exports = {
 	registerValidation: registerValidation,
     loginValidation: loginValidation,
 	postComplaint: postComplaint,
-	updateComplaint: updateComplaint,
-	fwd_auth_Complaint: fwd_auth_Complaint,
+	authComplaint: authComplaint,
 	rejectComplaint: rejectComplaint,
-	updateFeedback: updateFeedback
+	resolveComplaint: resolveComplaint
 };

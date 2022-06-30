@@ -5,6 +5,10 @@ const complaintSchema = mongoose.Schema(
 		complaintNumber: {
 			type: Number
 		},
+        name: {
+			type: String,
+			required: true
+		},
         forceNumber: {
             type: String,
             required: true
@@ -31,13 +35,6 @@ const complaintSchema = mongoose.Schema(
         },
         resolutionDate : {
             type: Date
-        },
-        reasonOfCancellation: {
-            type: String
-        },
-        feedbackRating: {
-            type: Number,
-            default: 0
         }
 	},
 	{ versionKey: false }
