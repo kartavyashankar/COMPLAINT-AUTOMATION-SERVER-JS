@@ -4,8 +4,8 @@
   "description": "It is an application to automate Compliant Management System at CRPF Camp, Ranchi",
   "main": "src/main/server.js",
   "scripts": {
-    "test": "node src/main/js/server.js",
-    "start": "node src/main/js/server.js"
+    "test": "nodemon ./src/main/js/server.js",
+    "start": "nodemon ./src/main/js/server.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "http": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.3",
+    "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.4.0"
   }
 }
