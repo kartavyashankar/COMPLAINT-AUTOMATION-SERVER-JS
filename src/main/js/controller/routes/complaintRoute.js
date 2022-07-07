@@ -23,6 +23,21 @@ const verifyToken = require("./verifications/verifyToken");
  *  patch:
  *   summary: Forward a complaint
  *   description: Forward a complaint one step up the heirarchy.
+ *   requestBody:
+ *    required: true
+ *    content:
+ *     application/json:
+ *      schema:
+ *       type: object
+ *       properties:
+ *        forceNumber:
+ *         type: String
+ *         description: User's forceNumber.
+ *         example: 123456
+ *        complaintNumber:
+ *         type: String
+ *         description: ID of the complaint
+ *         example: 01/20
  *   responses:
  *    200:
  *     content:
@@ -32,8 +47,27 @@ const verifyToken = require("./verifications/verifyToken");
  *        properties:
  *         message:
  *          type: String
+ *          description: Success Message
  *
+ *    401:
+ *     content:
+ *      appication/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *          description: Unauthorized Message
  *
+ *     404:
+ *     content:
+ *      appication/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *          description: Not Found Message
  *
  */
 // 1 -> 2
@@ -41,13 +75,13 @@ router.patch("/forward", verifyAccess, async (req, res) => {
   const { error } = fwd_auth_Complaint(req.body);
 
   if (error) {
-    return res.status(400).json({ message: error.details[0].message });
+    return res.status(401).json({ message: error.details[0].message });
   }
   try {
     const user = await User.findOne({ forceNumber: req.body.forceNumber });
 
     if (!user) {
-      return res.status(400).json({ message: "FATAL_ERROR_USER_NOT_FOUND!!" });
+      return res.status(404).json({ message: "User Not Found!!" });
     } else if (user.designation != "SO" && user.designation != "DC") {
       return res.status(401).json({ message: "Forbidden Request!!" });
     }
@@ -57,12 +91,12 @@ router.patch("/forward", verifyAccess, async (req, res) => {
     });
 
     if (!complaint) {
-      return res.status(400).json({ message: "Complaint Not Found!!" });
+      return res.status(404).json({ message: "Complaint Not Found!!" });
     } else if (complaint.status === 0) {
       return res.status(401).json({ message: "Complaint has been rejected!!" });
     } else if (complaint.status === 2) {
       return res
-        .status(401)
+        .status(200)
         .json({ message: "Complaint has already been forwarded!!" });
     } else if (complaint.status === 3) {
       return res

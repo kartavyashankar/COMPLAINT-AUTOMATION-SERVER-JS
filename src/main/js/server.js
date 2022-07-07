@@ -20,7 +20,7 @@ const swaggerOptions = {
       servers: ["http://localhost:8080"],
     },
   },
-  apis: [`${__dirname}/controller/routes/*.js`],
+  apis: [`${__dirname}/controller/routes/*.js`, `${__dirname}/models/*.js`],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
