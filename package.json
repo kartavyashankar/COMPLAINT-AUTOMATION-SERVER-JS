@@ -19,7 +19,7 @@
   "homepage": "https://github.com/kartavyashankar/COMPLAINT-AUTOMATION-SERVER-JS#readme",
   "devDependencies": {
     "install": "^0.13.0",
-    "nodemon": "^2.0.16",
+    "nodemon": "^2.0.19",
     "npm": "^8.10.0"
   },
   "dependencies": {
