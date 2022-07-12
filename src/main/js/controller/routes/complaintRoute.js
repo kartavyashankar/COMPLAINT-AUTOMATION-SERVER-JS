@@ -90,6 +90,7 @@ const verifyToken = require('./verifications/verifyToken');
  */
 // 1 -> 2
 router.patch("/authorize", verifyAccess, async (req, res) => {
+
   const { error } = authComplaint(req.body);
 
   if(error) {
@@ -397,6 +398,21 @@ router.get("/active", verifyToken, async (req, res) => {
   } catch(err) {
       return res.status(500).json({ message : err });
   }
+});
+
+router.get("/active", verifyToken, async (req, res) => {
+    try {
+        const token = req.header("auth-token");
+        const findUser = jwt.verify(token, app_prop.TOKEN_SECRET);
+        const user = await User.findOne({ forceNumber : findUser.forceNumber });
+        if(!user) {
+            return res.status(400).json({ message : "FATAL_ERROR_USER_NOT_FOUND!!" });
+        }
+        const complaints = await Complaint.find({ status : [1,2] }).sort({ complaintNumber : -1 });
+		return res.status(200).json(complaints);
+    } catch(err) {
+        return res.status(500).json({ message : err });
+    }
 });
 
 module.exports = router;
