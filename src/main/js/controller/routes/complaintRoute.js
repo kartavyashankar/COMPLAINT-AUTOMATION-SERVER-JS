@@ -1,20 +1,19 @@
-const express = require("express");
+const express = require('express')
 const router = express.Router();
 const Complaint = require("../../models/complaint");
 const User = require("../../models/user");
 const verifyAccess = require("./verifications/verifyToken");
 const verifyComplaintAccess = require("./verifications/verifyComplaintAccess");
 const jwt = require("jsonwebtoken");
-const app_prop = require("../../../res/app-properties");
+const app_prop = require("../../../res/app-properties")
 
 const {
-  postComplaint,
-  updateComplaint,
-  fwd_auth_Complaint,
-  rejectComplaint,
-  updateFeedback,
+	postComplaint,
+    authComplaint,
+    rejectComplaint,
+    resolveComplaint
 } = require("./validations/validate");
-const verifyToken = require("./verifications/verifyToken");
+const verifyToken = require('./verifications/verifyToken');
 
 /**
  * @swagger
