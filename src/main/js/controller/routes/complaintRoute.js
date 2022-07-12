@@ -18,10 +18,10 @@ const verifyToken = require("./verifications/verifyToken");
 
 /**
  * @swagger
- * /forward:
+ * /authorize:
  *  patch:
- *   summary: Forward a complaint
- *   description: Forward a complaint one step up the heirarchy.
+ *   summary: Authorize a complaint
+ *   description: Authorize a complaint.
  *   requestBody:
  *    required: true
  *    content:
@@ -67,99 +67,61 @@ const verifyToken = require("./verifications/verifyToken");
  *         message:
  *          type: String
  *          description: Not Found Message
+ * 
+ *    405:
+ *     content:
+ *      appication/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *          description: Not Allowed Message
+ *    
+ *    500:
+ *     content:
+ *      appication/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *          description: Internal Error Message 
  *
  */
 // 1 -> 2
-router.patch("/forward", verifyAccess, async (req, res) => {
-  const { error } = fwd_auth_Complaint(req.body);
-
-  if (error) {
-    return res.status(401).json({ message: error.details[0].message });
-  }
-  try {
-    const user = await User.findOne({ forceNumber: req.body.forceNumber });
-
-    if (!user) {
-      return res.status(404).json({ message: "User Not Found!!" });
-    } else if (user.designation != "SO" && user.designation != "DC") {
-      return res.status(401).json({ message: "Forbidden Request!!" });
-    }
-
-    const complaint = await Complaint.findOne({
-      complaintNumber: req.body.complaintNumber,
-    });
-
-    if (!complaint) {
-      return res.status(404).json({ message: "Complaint Not Found!!" });
-    } else if (complaint.status === 0) {
-      return res.status(401).json({ message: "Complaint has been rejected!!" });
-    } else if (complaint.status === 2) {
-      return res
-        .status(200)
-        .json({ message: "Complaint has already been forwarded!!" });
-    } else if (complaint.status === 3) {
-      return res
-        .status(401)
-        .json({ message: "Complaint has been authorized!!" });
-    } else if (complaint.status === 4) {
-      return res.status(401).json({ message: "Complaint has been resolved!!" });
-    }
-
-    const updatedComplaint = await Complaint.updateOne(
-      { complaintNumber: req.body.complaintNumber },
-      { $set: { status: 2 } }
-    );
-
-    return res
-      .status(200)
-      .json({ message: "Complaint Forwarded Successfully!!" });
-  } catch (err) {
-    return res.status(500).json({ message: err });
-  }
-});
-
-// 1,2 -> 3
 router.patch("/authorize", verifyAccess, async (req, res) => {
-  const { error } = fwd_auth_Complaint(req.body);
+  const { error } = authComplaint(req.body);
 
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
+  if(error) {
+      return res.status(400).json({ message : error.details[0].message });
   }
   try {
-    const user = await User.findOne({ forceNumber: req.body.forceNumber });
+      const user = await User.findOne({ forceNumber : req.body.forceNumber });
 
-    if (!user) {
-      return res.status(400).json({ message: "FATAL_ERROR_USER_NOT_FOUND!!" });
-    } else if (user.designation != "DC") {
-      return res.status(401).json({ message: "Forbidden Request!!" });
-    }
+      if(!user) {
+          return res.status(400).json({ message : "FATAL_ERROR_USER_NOT_FOUND!!" });
+      } else if(user.designation != "SO" && user.designation != "IC" && user.designation != "DC") {
+          return res.status(401).json({ message : "Forbidden Request!!" });
+      }
+      
+      const complaint = await Complaint.findOne({ complaintNumber : req.body.complaintNumber });
+      
+      if(!complaint) {
+          return res.status(404).json({ message : "Complaint Not Found!!" });
+      } else if(complaint.status === 0) {
+          return res.status(401).json({ message : "Complaint has been rejected!!" });
+      } else if(complaint.status === 2) {
+          return res.status(405).json({ message : "Complaint has already been authorized!!" });
+      } else if(complaint.status === 3) {
+          return res.status(405).json({ message : "Complaint has already been resolved!!" });
+      }
 
-    const complaint = await Complaint.findOne({
-      complaintNumber: req.body.complaintNumber,
-    });
+      const updatedComplaint = await Complaint.updateOne({ complaintNumber : req.body.complaintNumber }, { $set: { status: 2 } });
 
-    if (!complaint) {
-      return res.status(400).json({ message: "Complaint Not Found!!" });
-    } else if (complaint.status === 0) {
-      return res.status(401).json({ message: "Complaint has been rejected!!" });
-    } else if (complaint.status === 3) {
-      return res
-        .status(401)
-        .json({ message: "Complaint has already been authorized!!" });
-    } else if (complaint.status === 4) {
-      return res.status(401).json({ message: "Complaint has been resolved!!" });
-    }
-
-    const updatedComplaint = await Complaint.updateOne(
-      { complaintNumber: req.body.complaintNumber },
-      { $set: { status: 3 } }
-    );
-
-    return res
-      .status(200)
-      .json({ message: "Complaint Authorized Successfully!!" });
-  } catch (err) {
-    return res.status(500).json({ message: err });
+      return res.status(200).json({ message : "Complaint Authorized Successfully!!" });
+  } catch(err) {
+      return res.status(500).json({ message : err });
   }
 });
 
