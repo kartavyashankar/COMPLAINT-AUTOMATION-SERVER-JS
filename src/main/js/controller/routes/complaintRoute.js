@@ -124,17 +124,15 @@ router.post("/", verifyComplaintAccess, async (req, res) => {
         return res.status(400).json({ message : error.details[0].message });
     }
     try {
-        const complaint = await Complaint.findOne({ complaint : req.body.complaint, category : req.body.category });
-        if(complaint)
-            return res.status(400).json({ message : "Complaint already exists!!" });
         const user = await User.findOne({ forceNumber : req.body.forceNumber })
-        
+        const complaints = await Complaint.find();
         const new_complaint = new Complaint({
             name: user.name,
 			forceNumber: req.body.forceNumber,
 			quarterNumber: user.quarterNumber,
             category: req.body.category,
-            complaint: req.body.complaint
+            complaint: req.body.complaint,
+            complaintNumber: complaints.length + 101
 		});
 		const savePost = await new_complaint.save();
 		return res.status(201).json({ message : "Complaint Registered!!" });
@@ -153,8 +151,8 @@ router.get("/", verifyToken, async (req, res) => {
         if(!user) {
             return res.status(400).json({ message : "FATAL_ERROR_USER_NOT_FOUND!!" });
         }
-        else if(user.designation === "SO" && user.designation === "IC" && user.designation === "DC") {
-            complaints_level = await Complaint.find({ status : [1,2,3], forceNumber: { $ne: user.forceNumber } });
+        else if(user.designation === "SO" || user.designation === "IC" || user.designation === "DC") {
+            complaints_level = await Complaint.find({ status : [0,1,2,3], forceNumber: { $ne: user.forceNumber } });
         }
         complaints = await Complaint.find({ forceNumber : user.forceNumber});
         complaints = complaints.concat(complaints_level);
