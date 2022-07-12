@@ -16,7 +16,6 @@ const {
 } = require("./validations/validate");
 const verifyToken = require("./verifications/verifyToken");
 
-// Routes
 /**
  * @swagger
  * /forward:
@@ -48,7 +47,7 @@ const verifyToken = require("./verifications/verifyToken");
  *         message:
  *          type: String
  *          description: Success Message
- *
+ *     
  *    401:
  *     content:
  *      appication/json:
@@ -59,7 +58,7 @@ const verifyToken = require("./verifications/verifyToken");
  *          type: String
  *          description: Unauthorized Message
  *
- *     404:
+ *    404:
  *     content:
  *      appication/json:
  *       schema:
