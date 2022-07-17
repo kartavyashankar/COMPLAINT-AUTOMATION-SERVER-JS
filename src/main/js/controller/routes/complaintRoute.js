@@ -202,7 +202,7 @@ router.patch("/authorize", verifyComplaintAccess, async (req, res) => {
  *
  */
 // 2 -> 3
-router.patch("/resolve", verifyAccess, async (req, res) => {
+router.patch("/resolve", verifyComplaintAccess, async (req, res) => {
   const { error } = resolveComplaint(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -311,7 +311,7 @@ router.patch("/resolve", verifyAccess, async (req, res) => {
  *
  */
 //1,2 -> 0
-router.patch("/reject", verifyAccess, async (req, res) => {
+router.patch("/reject", verifyComplaintAccess, async (req, res) => {
   const { error } = rejectComplaint(req.body);
 
   if (error) {
