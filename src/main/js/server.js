@@ -35,6 +35,14 @@ app.use("/user", userRoute);
 app.use("/user/complaint", complaintRoute);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
+app.get("/healthcheck", (req, res) => {
+  res.status(200).send("UP");
+});
+
+app.get("/", (req, res) => {
+  res.status(302).redirect("/api-docs");
+});
+
 mongoose
   .connect(app_prop.DB_CONNECT, {
     useNewUrlParser: true,
@@ -43,6 +51,8 @@ mongoose
   .then(() => console.log("Connected to DB!"));
 
 const PORT = app_prop.PORT;
-app.listen(process.env.PORT || PORT, () =>
+const server = app.listen(process.env.PORT || PORT, () =>
   console.log(`\nServer running on port ${PORT}`)
 );
+
+module.exports = server;
