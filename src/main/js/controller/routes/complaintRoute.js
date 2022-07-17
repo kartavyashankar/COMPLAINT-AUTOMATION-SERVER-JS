@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Complaint = require("../../models/complaint");
 const User = require("../../models/user");
-const verifyAccess = require("./verifications/verifyToken");
+const verifyToken = require("./verifications/verifyToken");
 const verifyComplaintAccess = require("./verifications/verifyComplaintAccess");
 const jwt = require("jsonwebtoken");
 const app_prop = require("../../../res/app-properties");
@@ -13,8 +13,6 @@ const {
   rejectComplaint,
   resolveComplaint,
 } = require("./validations/validate");
-
-const verifyToken = require("./verifications/verifyToken");
 
 
 /**
@@ -93,25 +91,13 @@ const verifyToken = require("./verifications/verifyToken");
  *
  */
 // 1 -> 2
-router.patch("/authorize", verifyAccess, async (req, res) => {
+router.patch("/authorize", verifyComplaintAccess, async (req, res) => {
   const { error } = authComplaint(req.body);
 
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
   try {
-    const user = await User.findOne({ forceNumber: req.body.forceNumber });
-
-    if (!user) {
-      return res.status(400).json({ message: "FATAL_ERROR_USER_NOT_FOUND!!" });
-    } else if (
-      user.designation != "SO" &&
-      user.designation != "IC" &&
-      user.designation != "DC"
-    ) {
-      return res.status(401).json({ message: "Forbidden Request!!" });
-    }
-
     const complaint = await Complaint.findOne({
       complaintNumber: req.body.complaintNumber,
     });
@@ -127,7 +113,7 @@ router.patch("/authorize", verifyAccess, async (req, res) => {
     } else if (complaint.status === 3) {
       return res
         .status(405)
-        .json({ message: "Complaint has already been resolved!!" });
+        .json({ message: "Complaint has been resolved!!" });
     }
 
     const updatedComplaint = await Complaint.updateOne(
@@ -159,10 +145,6 @@ router.patch("/authorize", verifyAccess, async (req, res) => {
  *      schema:
  *       type: object
  *       properties:
- *        forceNumber:
- *         type: String
- *         description: User's forceNumber.
- *         example: 123456
  *        complaintNumber:
  *         type: String
  *         description: ID of the complaint
@@ -220,24 +202,12 @@ router.patch("/authorize", verifyAccess, async (req, res) => {
  *
  */
 // 2 -> 3
-router.patch("/resolve", verifyAccess, async (req, res) => {
+router.patch("/resolve", verifyComplaintAccess, async (req, res) => {
   const { error } = resolveComplaint(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
   try {
-    const user = await User.findOne({ forceNumber: req.body.forceNumber });
-
-    if (!user) {
-      return res.status(400).json({ message: "FATAL_ERROR_USER_NOT_FOUND!!" });
-    } else if (
-      user.designation != "SO" &&
-      user.designation != "IC" &&
-      user.designation != "DC"
-    ) {
-      return res.status(401).json({ message: "Forbidden Request!!" });
-    }
-
     const complaint = await Complaint.findOne({
       complaintNumber: req.body.complaintNumber,
     });
@@ -284,10 +254,6 @@ router.patch("/resolve", verifyAccess, async (req, res) => {
  *      schema:
  *       type: object
  *       properties:
- *        forceNumber:
- *         type: String
- *         description: User's forceNumber.
- *         example: 123456
  *        complaintNumber:
  *         type: String
  *         description: ID of the complaint
@@ -345,25 +311,13 @@ router.patch("/resolve", verifyAccess, async (req, res) => {
  *
  */
 //1,2 -> 0
-router.patch("/reject", verifyAccess, async (req, res) => {
+router.patch("/reject", verifyComplaintAccess, async (req, res) => {
   const { error } = rejectComplaint(req.body);
 
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
   try {
-    const user = await User.findOne({ forceNumber: req.body.forceNumber });
-
-    if (!user) {
-      return res.status(404).json({ message: "FATAL_ERROR_USER_NOT_FOUND!!" });
-    } else if (
-      user.designation != "SO" &&
-      user.designation != "IC" &&
-      user.designation != "DC"
-    ) {
-      return res.status(401).json({ message: "Forbidden Request!!" });
-    }
-
     const complaint = await Complaint.findOne({
       complaintNumber: req.body.complaintNumber,
     });
@@ -373,7 +327,11 @@ router.patch("/reject", verifyAccess, async (req, res) => {
     } else if (complaint.status === 3) {
       return res
         .status(405)
-        .json({ message: "Complaint has already been resolved!!" });
+        .json({ message: "Complaint has been resolved!!" });
+    } else if (complaint.status === 0) {
+      return res
+        .status(405)
+        .json({ message: "Complaint has already been rejected!!" });
     }
 
     const updatedComplaint = await Complaint.updateOne(
@@ -405,10 +363,6 @@ router.patch("/reject", verifyAccess, async (req, res) => {
  *      schema:
  *       type: object
  *       properties:
- *        forceNumber:
- *         type: String
- *         description: User's forceNumber
- *         example: 123456
  *        complaint:
  *         type: String
  *         description: Complaint
@@ -469,13 +423,18 @@ router.patch("/reject", verifyAccess, async (req, res) => {
  *          description: Internal Error Message
  *
  */
-router.post("/", verifyComplaintAccess, async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   const { error } = postComplaint(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
   try {
-    const user = await User.findOne({ forceNumber: req.body.forceNumber });
+    const token = req.header("auth-token");
+    const findUser = jwt.verify(token, app_prop.TOKEN_SECRET);
+    const user = await User.findOne({ forceNumber : findUser.forceNumber });
+    if (!user) {
+      return res.status(404).json({ message: "User doesn't exists!!" });
+    }
     const complaints = await Complaint.find();
     const new_complaint = new Complaint({
       name: user.name,

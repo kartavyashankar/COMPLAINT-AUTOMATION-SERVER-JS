@@ -45,7 +45,7 @@ const jwt = require("jsonwebtoken");
  *         type: string
  *         description: User's designation.
  *        quaterType:
- *         type: string
+ *         type: number
  *         description: User's Quater Type.
  *        quaterNumber:
  *         type: number
