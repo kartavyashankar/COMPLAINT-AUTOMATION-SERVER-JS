@@ -20,12 +20,9 @@
   },
   "homepage": "https://github.com/kartavyashankar/COMPLAINT-AUTOMATION-SERVER-JS#readme",
   "devDependencies": {
-    "chai": "^4.3.6",
     "install": "^0.13.0",
-    "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
-    "npm": "^8.10.0",
-    "supertest": "^6.2.4"
+    "npm": "^8.10.0"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -37,6 +34,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.3",
     "swagger-jsdoc": "^6.2.1",
-    "swagger-ui-express": "^4.4.0"
+    "swagger-ui-express": "^4.4.0",
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "supertest": "^6.2.4"
   }
 }
