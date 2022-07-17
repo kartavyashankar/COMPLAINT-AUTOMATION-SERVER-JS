@@ -8,6 +8,9 @@ jobs:
     executor: node/default
     steps:
       - checkout
+      - node/install:
+          install-yarn: true
+          node-version: "18.5.0"
       - node/install-packages:
           pkg-manager: npm
       - run:
