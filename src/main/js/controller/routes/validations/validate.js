@@ -23,7 +23,6 @@ const loginValidation = (data) => {
 
 const postComplaint = (data) => {
 	const validSchema = Joi.object({
-		forceNumber: Joi.string().required(),
 		category: Joi.string().required(),
 		complaint: Joi.string().required()
 	});
@@ -32,7 +31,6 @@ const postComplaint = (data) => {
 
 const authComplaint = (data) => {
 	const validSchema = Joi.object({
-		forceNumber: Joi.string().required(),
 		complaintNumber : Joi.number().positive().required(),
 	});
 	return validSchema.validate(data);
@@ -40,7 +38,6 @@ const authComplaint = (data) => {
 
 const rejectComplaint = (data) => {
 	const validSchema = Joi.object({
-		forceNumber: Joi.string().required(),
 		complaintNumber : Joi.number().positive().required(),
 	});
 	return validSchema.validate(data);
@@ -48,7 +45,6 @@ const rejectComplaint = (data) => {
 
 const resolveComplaint = (data) => {
 	const validSchema = Joi.object({
-		forceNumber: Joi.string().required(),
 		complaintNumber: Joi.number().positive().required()
 	});
 	return validSchema.validate(data);
