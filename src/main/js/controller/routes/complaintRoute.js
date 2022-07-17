@@ -13,7 +13,9 @@ const {
   rejectComplaint,
   resolveComplaint,
 } = require("./validations/validate");
+
 const verifyToken = require("./verifications/verifyToken");
+
 
 /**
  * @swagger
@@ -141,6 +143,7 @@ router.patch("/authorize", verifyAccess, async (req, res) => {
   }
 });
 
+
 /**
  * @swagger
  * /user/complaint/resolve:
@@ -216,7 +219,6 @@ router.patch("/authorize", verifyAccess, async (req, res) => {
  *          description: Internal Error Message
  *
  */
-
 // 2 -> 3
 router.patch("/resolve", verifyAccess, async (req, res) => {
   const { error } = resolveComplaint(req.body);
@@ -265,6 +267,7 @@ router.patch("/resolve", verifyAccess, async (req, res) => {
     return res.status(500).json({ message: err });
   }
 });
+
 
 /**
  * @swagger
@@ -341,7 +344,6 @@ router.patch("/resolve", verifyAccess, async (req, res) => {
  *          description: Internal Error Message
  *
  */
-
 //1,2 -> 0
 router.patch("/reject", verifyAccess, async (req, res) => {
   const { error } = rejectComplaint(req.body);
@@ -387,9 +389,10 @@ router.patch("/reject", verifyAccess, async (req, res) => {
   }
 });
 
+
 /**
  * @swagger
- * /user/complaint/:
+ * /user/complaint:
  *  post:
  *   tags:
  *    - "Complaint Routes"
@@ -466,7 +469,6 @@ router.patch("/reject", verifyAccess, async (req, res) => {
  *          description: Internal Error Message
  *
  */
-
 router.post("/", verifyComplaintAccess, async (req, res) => {
   const { error } = postComplaint(req.body);
   if (error) {
@@ -490,6 +492,45 @@ router.post("/", verifyComplaintAccess, async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /user/complaint:
+ *  get:
+ *   tags:
+ *    - "Complaint Routes"
+ *   summary: Get active complaints of the user.
+ *   description: Get all complaints list.
+ *   parameters:
+ *    - name: auth-token
+ *      in: header
+ *      description: Authentication Token
+ *   responses:
+ *    200:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         complaints:
+ *          type: List
+ *    404:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *    500:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ */
 router.get("/", verifyToken, async (req, res) => {
   try {
     const token = req.header("auth-token");
@@ -517,6 +558,8 @@ router.get("/", verifyToken, async (req, res) => {
     return res.status(500).json({ message: err });
   }
 });
+
+
 /**
  * @swagger
  * /user/complaint/active:
@@ -524,22 +567,11 @@ router.get("/", verifyToken, async (req, res) => {
  *   tags:
  *    - "Complaint Routes"
  *   summary: Get active complaints of the user.
- *   description: .
- *   requestBody:
- *    required: true
- *    content:
- *     application/json:
- *      schema:
- *       type: object
- *       properties:
- *        forceNumber:
- *         type: string
- *         description: User's forceNumber.
- *         example: abc123456
- *        password:
- *         type: string
- *         description: User's password.
- *         example: Strong password 123
+ *   description: Get active complaints list.
+ *   parameters:
+ *    - name: auth-token
+ *      in: header
+ *      description: Authentication Token
  *   responses:
  *    200:
  *     content:
@@ -565,10 +597,7 @@ router.get("/", verifyToken, async (req, res) => {
  *        properties:
  *         message:
  *          type: String
- *
- *
  */
-
 router.get("/active", verifyToken, async (req, res) => {
   try {
     const token = req.header("auth-token");
