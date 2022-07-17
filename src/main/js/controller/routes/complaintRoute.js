@@ -17,7 +17,7 @@ const verifyToken = require("./verifications/verifyToken");
 
 /**
  * @swagger
- * /authorize:
+ * /user/complaint/authorize:
  *  patch:
  *   tags:
  *    - "Complaint Routes"
@@ -143,7 +143,7 @@ router.patch("/authorize", verifyAccess, async (req, res) => {
 
 /**
  * @swagger
- * /resolve:
+ * /user/complaint/resolve:
  *  patch:
  *   tags:
  *    - "Complaint Routes"
@@ -268,7 +268,7 @@ router.patch("/resolve", verifyAccess, async (req, res) => {
 
 /**
  * @swagger
- * /reject:
+ * /user/complaint/reject:
  *  patch:
  *   tags:
  *    - "Complaint Routes"
@@ -389,7 +389,7 @@ router.patch("/reject", verifyAccess, async (req, res) => {
 
 /**
  * @swagger
- * /:
+ * /user/complaint/:
  *  post:
  *   tags:
  *    - "Complaint Routes"
@@ -519,7 +519,7 @@ router.get("/", verifyToken, async (req, res) => {
 });
 /**
  * @swagger
- * /active:
+ * /user/complaint/active:
  *  get:
  *   tags:
  *    - "Complaint Routes"

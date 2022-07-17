@@ -13,7 +13,7 @@ const jwt = require("jsonwebtoken");
 
 /**
  * @swagger
- * /register:
+ * /user/register:
  *  post:
  *   tags:
  *    - "User Routes"
@@ -102,7 +102,7 @@ router.post("/register", async (req, res) => {
 
 /**
  * @swagger
- * /login:
+ * /user/login:
  *  post:
  *   tags:
  *    - "User Routes"
