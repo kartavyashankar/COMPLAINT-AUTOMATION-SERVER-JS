@@ -11,7 +11,6 @@ const {
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Routes
 /**
  * @swagger
  * /register:
@@ -99,19 +98,84 @@ router.post("/register", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /login:
+ *  post:
+ *   summary: Sign in user
+ *   description: Create a session for the user.
+ *   requestBody:
+ *    required: true
+ *    content:
+ *     application/json:
+ *      schema:
+ *       type: object
+ *       properties:
+ *        forceNumber:
+ *         type: string
+ *         description: User's forceNumber.
+ *         example: abc123456
+ *        password:
+ *         type: string
+ *         description: User's password.
+ *         example: Strong password 123
+ *   responses:
+ *    200:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *    400:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *    401:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *    404:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *    500:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *
+ *
+ */
 router.post("/login", async (req, res) => {
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
   try {
     const user = await User.findOne({ forceNumber: req.body.forceNumber });
     if (!user) {
-      return res.status(400).json({ message: "User doesn't exists!!" });
+      return res.status(404).json({ message: "User doesn't exists!!" });
     }
 
     const validPass = await bcrypt.compare(req.body.password, user.password);
 
     if (!validPass) {
-      return res.status(400).json({ message: "Invalid Password!!" });
+      return res.status(401).json({ message: "Invalid Password!!" });
     }
 
     const token = jwt.sign(
@@ -127,7 +191,6 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err });
   }
-
 });
 
 module.exports = router;
