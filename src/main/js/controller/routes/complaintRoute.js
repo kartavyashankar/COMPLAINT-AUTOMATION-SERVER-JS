@@ -499,7 +499,7 @@ router.post("/", verifyComplaintAccess, async (req, res) => {
  *  get:
  *   tags:
  *    - "Complaint Routes"
- *   summary: Get active complaints of the user.
+ *   summary: Get all complaints of the user.
  *   description: Get all complaints list.
  *   parameters:
  *    - name: auth-token
@@ -514,6 +514,25 @@ router.post("/", verifyComplaintAccess, async (req, res) => {
  *        properties:
  *         complaints:
  *          type: List
+ *          description: List of all complaints
+ *    400:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *          description: Invalid Token Message
+ *    401:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *          description: Unauthorized Token, Access Denied message
  *    404:
  *     content:
  *      application/json:
@@ -522,6 +541,7 @@ router.post("/", verifyComplaintAccess, async (req, res) => {
  *        properties:
  *         message:
  *          type: String
+ *          description: User not found message
  *    500:
  *     content:
  *      application/json:
@@ -530,6 +550,7 @@ router.post("/", verifyComplaintAccess, async (req, res) => {
  *        properties:
  *         message:
  *          type: String
+ *          description: Internal Error Message
  */
 router.get("/", verifyToken, async (req, res) => {
   try {
@@ -539,7 +560,7 @@ router.get("/", verifyToken, async (req, res) => {
     let complaints = [];
     let complaints_level = [];
     if (!user) {
-      return res.status(400).json({ message: "FATAL_ERROR_USER_NOT_FOUND!!" });
+      return res.status(404).json({ message: "FATAL_ERROR_USER_NOT_FOUND!!" });
     } else if (
       user.designation === "SO" ||
       user.designation === "IC" ||
@@ -573,6 +594,7 @@ router.get("/", verifyToken, async (req, res) => {
  *      in: header
  *      description: Authentication Token
  *   responses:
+ *    responses:
  *    200:
  *     content:
  *      application/json:
@@ -581,6 +603,25 @@ router.get("/", verifyToken, async (req, res) => {
  *        properties:
  *         complaints:
  *          type: List
+ *          description: List of active complaints
+ *    400:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *          description: Invalid Token Message
+ *    401:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        properties:
+ *         message:
+ *          type: String
+ *          description: Unauthorized Token, Access Denied message
  *    404:
  *     content:
  *      application/json:
@@ -589,6 +630,7 @@ router.get("/", verifyToken, async (req, res) => {
  *        properties:
  *         message:
  *          type: String
+ *          description: User not found message
  *    500:
  *     content:
  *      application/json:
@@ -597,6 +639,7 @@ router.get("/", verifyToken, async (req, res) => {
  *        properties:
  *         message:
  *          type: String
+ *          description: Internal Error Message
  */
 router.get("/active", verifyToken, async (req, res) => {
   try {
