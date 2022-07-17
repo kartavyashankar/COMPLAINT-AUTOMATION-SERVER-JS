@@ -5,8 +5,9 @@
   "main": "src/main/server.js",
   "scripts": {
     "test": "mocha 'src/test/**/*.js' --recursive --timeout 60000 --exit",
-    "start": "nodemon ./src/main/js/server.js",
-    "build": "npm install && npm run test"
+    "start": "npm run build && node ./src/main/js/server.js",
+    "build": "npm install && npm run test",
+    "dev": "npm run build && nodemon ./src/main/js/server.js"
   },
   "repository": {
     "type": "git",
