@@ -23,6 +23,10 @@ const {
  *    - "Complaint Routes"
  *   summary: Authorize a complaint
  *   description: Authorize a complaint.
+ *   parameters:
+ *    - name: auth-token
+ *      in: header
+ *      description: Authentication Token
  *   requestBody:
  *    required: true
  *    content:
@@ -30,10 +34,6 @@ const {
  *      schema:
  *       type: object
  *       properties:
- *        forceNumber:
- *         type: String
- *         description: User's forceNumber.
- *         example: 123456
  *        complaintNumber:
  *         type: String
  *         description: ID of the complaint
@@ -138,6 +138,10 @@ router.patch("/authorize", verifyComplaintAccess, async (req, res) => {
  *    - "Complaint Routes"
  *   summary: Resolve a complaint
  *   description: Resolve a complaint.
+ *   parameters:
+ *    - name: auth-token
+ *      in: header
+ *      description: Authentication Token
  *   requestBody:
  *    required: true
  *    content:
@@ -247,6 +251,10 @@ router.patch("/resolve", verifyComplaintAccess, async (req, res) => {
  *    - "Complaint Routes"
  *   summary: Reject a complaint
  *   description: Reject a complaint.
+ *   parameters:
+ *    - name: auth-token
+ *      in: header
+ *      description: Authentication Token
  *   requestBody:
  *    required: true
  *    content:
@@ -356,6 +364,10 @@ router.patch("/reject", verifyComplaintAccess, async (req, res) => {
  *    - "Complaint Routes"
  *   summary: Register a complaint
  *   description: Register a complaint.
+ *   parameters:
+ *    - name: auth-token
+ *      in: header
+ *      description: Authentication Token
  *   requestBody:
  *    required: true
  *    content:

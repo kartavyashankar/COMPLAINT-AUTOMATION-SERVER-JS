@@ -12,7 +12,11 @@ module.exports = async function (req, res, next) {
 		const user = await User.findOne({ forceNumber: verification.forceNumber });
 		if(!user) {
             return res.status(404).json({ message : "FATAL_ERROR_USER_NOT_FOUND!!" });
-        } else if(user.designation != "SO" && user.designation != "IC" && user.designation != "DC") {
+        } else if(
+				user.designation != "SO" && 
+				user.designation != "IC" && 
+				user.designation != "DC"
+			) {
             return res.status(401).json({ message : "Forbidden Request!!" });
         }
 		next();
