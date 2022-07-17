@@ -17,7 +17,7 @@ const swaggerOptions = {
         name: "Anshul Pandey",
         email: "anshulpandey275@gmail.com",
       },
-      servers: ["https://crpf-back.herokuapp.com"],
+      servers: ["https://crpf-complaint-api.herokuapp.com"],
     },
   },
   apis: [`${__dirname}/controller/routes/*.js`, `${__dirname}/models/*.js`],
