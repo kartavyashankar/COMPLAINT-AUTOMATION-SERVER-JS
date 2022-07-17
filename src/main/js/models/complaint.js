@@ -1,5 +1,47 @@
 const mongoose = require("mongoose");
 
+/**
+ * @swagger
+ *  components:
+ *   schemas:
+ *    Complaint:
+ *     type: object
+ *     required:
+ *      - name
+ *      - forceNumber
+ *      - quarterNumber
+ *      - category
+ *      - complaint
+ *     properties:
+ *      complaintNumber:
+ *       type: Number
+ *       description: Complaint Number
+ *      name:
+ *       type: String
+ *       description: Name of the complaint raiser
+ *      forceNumber:
+ *       type: String
+ *       description: Force Number of the complaint raiser
+ *      quarterNumber:
+ *       type: Number
+ *       description: Quarter Number of complaint
+ *      category:
+ *       type: String
+ *       description: Category of Complaint
+ *      complaint:
+ *       type: String 
+ *       description: Description of the complaint
+ *      registrationDate:
+ *       type: Date
+ *       description: Date when complaint is registered
+ *      status:
+ *       type: Number
+ *       description: Status of the complaint
+ *      resolutionDate:
+ *       type: Date
+ *       description: Date of resolution of complaint
+ */
+
 const complaintSchema = mongoose.Schema(
 	{
 		complaintNumber: {

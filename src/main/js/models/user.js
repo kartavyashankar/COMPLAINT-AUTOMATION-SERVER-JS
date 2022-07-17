@@ -1,5 +1,42 @@
 const mongoose = require("mongoose");
 
+/**
+ * @swagger
+ *  components:
+ *   schemas:
+ *    User:
+ *     type: object
+ *     required:
+ *      - name
+ *      - forceNumber
+ *      - quarterNumber
+ *      - password
+ *      - unit
+ *      - designation
+ *      - quarterType
+ *     properties:
+ *      name:
+ *       type: String
+ *       description: Name of the user
+ *      forceNumber:
+ *       type: String
+ *       description: Force Number of the user
+ *      quarterNumber:
+ *       type: Number
+ *       description: Quarter Number of user
+ *      quarterType:
+ *       type: Number
+ *       description: Quarter Type of the User
+ *      password:
+ *       type: String 
+ *       description: Password of the user
+ *      unit:
+ *       type: String
+ *       description: Unit of the user
+ *      designation:
+ *       type: String
+ *       description: Designation of the user
+ */
 const userSchema = mongoose.Schema(
 	{
 		name: {

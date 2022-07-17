@@ -15,6 +15,8 @@ const jwt = require("jsonwebtoken");
  * @swagger
  * /register:
  *  post:
+ *   tags:
+ *    - "User Routes"
  *   summary: Register a new User
  *   description: Add a new User to the system.
  *   requestBody:
@@ -102,6 +104,8 @@ router.post("/register", async (req, res) => {
  * @swagger
  * /login:
  *  post:
+ *   tags:
+ *    - "User Routes"
  *   summary: Sign in user
  *   description: Create a session for the user.
  *   requestBody:

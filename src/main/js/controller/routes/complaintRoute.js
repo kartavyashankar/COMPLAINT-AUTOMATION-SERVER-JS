@@ -19,6 +19,8 @@ const verifyToken = require("./verifications/verifyToken");
  * @swagger
  * /authorize:
  *  patch:
+ *   tags:
+ *    - "Complaint Routes"
  *   summary: Authorize a complaint
  *   description: Authorize a complaint.
  *   requestBody:
@@ -143,6 +145,8 @@ router.patch("/authorize", verifyAccess, async (req, res) => {
  * @swagger
  * /resolve:
  *  patch:
+ *   tags:
+ *    - "Complaint Routes"
  *   summary: Resolve a complaint
  *   description: Resolve a complaint.
  *   requestBody:
@@ -266,6 +270,8 @@ router.patch("/resolve", verifyAccess, async (req, res) => {
  * @swagger
  * /reject:
  *  patch:
+ *   tags:
+ *    - "Complaint Routes"
  *   summary: Reject a complaint
  *   description: Reject a complaint.
  *   requestBody:
@@ -385,6 +391,8 @@ router.patch("/reject", verifyAccess, async (req, res) => {
  * @swagger
  * /:
  *  post:
+ *   tags:
+ *    - "Complaint Routes"
  *   summary: Register a complaint
  *   description: Register a complaint.
  *   requestBody:
@@ -513,6 +521,8 @@ router.get("/", verifyToken, async (req, res) => {
  * @swagger
  * /active:
  *  get:
+ *   tags:
+ *    - "Complaint Routes"
  *   summary: Get active complaints of the user.
  *   description: .
  *   requestBody:
