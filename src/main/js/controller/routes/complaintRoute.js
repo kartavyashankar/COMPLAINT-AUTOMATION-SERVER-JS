@@ -450,7 +450,7 @@ router.post("/", verifyToken, async (req, res) => {
     const complaints = await Complaint.find();
     const new_complaint = new Complaint({
       name: user.name,
-      forceNumber: req.body.forceNumber,
+      forceNumber: user.forceNumber,
       quarterNumber: user.quarterNumber,
       category: req.body.category,
       complaint: req.body.complaint,
