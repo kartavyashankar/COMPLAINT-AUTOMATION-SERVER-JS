@@ -190,6 +190,7 @@ router.post("/login", async (req, res) => {
     res.status(200).json({
       message: "Login Successful!!",
       forceNumber: user.forceNumber,
+      designation: user.designation,
       TOKEN: token,
     });
   } catch (err) {
