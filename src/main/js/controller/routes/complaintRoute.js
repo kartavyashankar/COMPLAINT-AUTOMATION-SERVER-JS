@@ -3,7 +3,7 @@ const router = express.Router();
 const Complaint = require("../../models/complaint");
 const User = require("../../models/user");
 const verifyToken = require("./verifications/verifyToken");
-const verifyComplaintAccess = require("./verifications/verifyComplaintAccess");
+const verifyAdminAccess = require("./verifications/verifyAdminAccess");
 const jwt = require("jsonwebtoken");
 const app_prop = require("../../../res/app-properties");
 
@@ -91,7 +91,7 @@ const {
  *
  */
 // 1 -> 2
-router.patch("/authorize", verifyComplaintAccess, async (req, res) => {
+router.patch("/authorize", verifyAdminAccess, async (req, res) => {
   const { error } = authComplaint(req.body);
 
   if (error) {
@@ -206,7 +206,7 @@ router.patch("/authorize", verifyComplaintAccess, async (req, res) => {
  *
  */
 // 2 -> 3
-router.patch("/resolve", verifyComplaintAccess, async (req, res) => {
+router.patch("/resolve", verifyAdminAccess, async (req, res) => {
   const { error } = resolveComplaint(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -319,7 +319,7 @@ router.patch("/resolve", verifyComplaintAccess, async (req, res) => {
  *
  */
 //1,2 -> 0
-router.patch("/reject", verifyComplaintAccess, async (req, res) => {
+router.patch("/reject", verifyAdminAccess, async (req, res) => {
   const { error } = rejectComplaint(req.body);
 
   if (error) {

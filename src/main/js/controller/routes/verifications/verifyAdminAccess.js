@@ -17,7 +17,7 @@ module.exports = async function (req, res, next) {
 				user.designation != "IC" && 
 				user.designation != "DC"
 			) {
-            return res.status(401).json({ message : "Forbidden Request!!" });
+            return res.status(403).json({ message : "Forbidden Request!!" });
         }
 		next();
 	} catch (err) {
