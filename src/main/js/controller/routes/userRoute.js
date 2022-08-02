@@ -206,9 +206,9 @@ router.delete("/delete", verifyAdminAccess, async (req, res) => {
       return res.status(404).json({ message: "User doesn't exists!!" });
     }
     User.deleteOne({ forceNumber: req.query.forceNumber });
-    res.status(200).json({ message: "Deleted User Successfully" });
+    return res.status(200).json({ message: "Deleted User Successfully" });
   } catch (err) {
-    res.status(400).json({ message: "BAD_REQUEST" });
+    return res.status(500).json({ message: "INTERNAL_SERVER_ERROR" });
   }
 });
 
