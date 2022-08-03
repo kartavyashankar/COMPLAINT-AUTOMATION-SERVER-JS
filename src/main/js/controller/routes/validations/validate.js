@@ -1,6 +1,6 @@
 const Joi = require("@hapi/joi");
 
-const registerValidation = (data) => {
+const userRegisterValidation = (data) => {
 	const validSchema = Joi.object({
 		name: Joi.string().required(),
 		forceNumber: Joi.string().required(),
@@ -11,6 +11,18 @@ const registerValidation = (data) => {
 		quarterNumber: Joi.number().required()
 	});
 	return validSchema.validate(data);
+};
+
+const workerRegisterValidation = (data) => {
+	const validSchema = Joi.object({
+		name: Joi.string().required(),
+		forceNumber: Joi.string().required(),
+		password: Joi.string().min(6).required(),
+		unit: Joi.string().required(),
+		category: Joi.string().required(),
+		quarterType: Joi.number().required(),
+		quarterNumber: Joi.number().required()
+	});
 };
 
 const loginValidation = (data) => {
@@ -51,10 +63,11 @@ const resolveComplaint = (data) => {
 };
 
 module.exports = {
-	registerValidation: registerValidation,
+	userRegisterValidation: userRegisterValidation,
     loginValidation: loginValidation,
 	postComplaint: postComplaint,
 	authComplaint: authComplaint,
 	rejectComplaint: rejectComplaint,
-	resolveComplaint: resolveComplaint
+	resolveComplaint: resolveComplaint,
+	workerRegisterValidation: workerRegisterValidation
 };
