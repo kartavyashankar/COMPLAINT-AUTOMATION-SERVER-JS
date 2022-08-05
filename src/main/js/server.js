@@ -30,8 +30,10 @@ app.use(express.json());
 
 const userRoute = require("./controller/routes/userRoute");
 const complaintRoute = require("./controller/routes/complaintRoute");
+const workerRoute = require("./controller/routes/workerRoute");
 
 app.use("/user", userRoute);
+app.use("/worker", workerRoute);
 app.use("/user/complaint", complaintRoute);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 

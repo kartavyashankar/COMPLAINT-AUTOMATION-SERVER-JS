@@ -9,7 +9,7 @@ const {
     loginValidation,
   } = require("./validations/validate");
 
-const router = express.router();
+const router = express.Router();
 
 router.post("/login", async(req, res) => {
     try {
@@ -59,6 +59,9 @@ router.post("/register", async(req, res) => {
             quarterNumber: req.body.quarterNumber,
         });
         const saveWorker = await worker.save();
+        if(!saveWorker) {
+            return res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+        }
         res.status(201).json({
             message: "Successfully Registered!!",
         });
@@ -66,3 +69,5 @@ router.post("/register", async(req, res) => {
         return res.status(500).json({ message: "INTERNAL SERVER ERROR" });
     }
 });
+
+module.exports = router;

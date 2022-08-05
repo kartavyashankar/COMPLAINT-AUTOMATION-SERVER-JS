@@ -35,6 +35,10 @@ const workerSchema = mongoose.Schema({
         type: [String],
         default: []
     },
+    isActive: {
+        type: Number,
+        default: 1
+    },
     pushNotificationToken: {
         type: String,
     }

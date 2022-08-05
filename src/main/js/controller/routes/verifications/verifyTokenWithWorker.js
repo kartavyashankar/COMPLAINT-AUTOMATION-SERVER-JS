@@ -20,6 +20,6 @@ module.exports = async function (req, res, next) {
             }
 		}
 	} catch (err) {
-		res.status(400).json({ message: "Invalid Token!!" });
+		res.status(500).json({ message: "INTERNAL SERVER ERROR" });
 	}
 };
