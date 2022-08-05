@@ -5,7 +5,7 @@ const verifyAdminAccess = require("./verifications/verifyAdminAccess");
 const app_prop = require("../../../res/app-properties");
 
 const {
-  registerValidation,
+  userRegisterValidation,
   loginValidation,
 } = require("./validations/validate");
 
@@ -71,9 +71,8 @@ const jwt = require("jsonwebtoken");
  *
  *
  */
-
 router.post("/register", async (req, res) => {
-  const { error } = registerValidation(req.body);
+  const { error } = userRegisterValidation(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
   try {
     const userExist = await User.findOne({ forceNumber: req.body.forceNumber });

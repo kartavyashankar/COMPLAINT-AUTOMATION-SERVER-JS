@@ -45,6 +45,7 @@ const mongoose = require("mongoose");
 const complaintSchema = mongoose.Schema(
 	{
 		complaintNumber: {
+            unique: true,
 			type: Number
 		},
         name: {
@@ -77,6 +78,12 @@ const complaintSchema = mongoose.Schema(
         },
         resolutionDate : {
             type: Date
+        },
+        assignedTo: {
+            type: String
+        },
+        closedBy: {
+            type: String
         }
 	},
 	{ versionKey: false }

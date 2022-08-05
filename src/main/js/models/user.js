@@ -44,6 +44,7 @@ const userSchema = mongoose.Schema(
 			required: true
 		},
 		forceNumber: {
+			unique: true,
 			type: String,
 			required: true
 		},
