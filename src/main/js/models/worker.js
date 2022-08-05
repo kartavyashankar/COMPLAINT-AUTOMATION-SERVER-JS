@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const workerSchema = mongoose.Schema({
     forceNumber: {
+        unique: true,
         type: String,
         required: true
     },
@@ -30,9 +31,12 @@ const workerSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    assignedJobs: {
+        type: [String],
+        default: []
+    },
     pushNotificationToken: {
         type: String,
-        required: true
     }
 }, { versionKey: false });
 

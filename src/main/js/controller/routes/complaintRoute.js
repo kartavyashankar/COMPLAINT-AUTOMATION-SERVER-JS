@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Complaint = require("../../models/complaint");
 const User = require("../../models/user");
+const Worker = require("../../models/worker");
 const verifyToken = require("./verifications/verifyToken");
+const verifyTokenWithWorker = require("./verifications/verifyTokenWithWorker");
 const verifyAdminAccess = require("./verifications/verifyAdminAccess");
 const jwt = require("jsonwebtoken");
 const app_prop = require("../../../res/app-properties");
@@ -206,7 +208,7 @@ router.patch("/authorize", verifyAdminAccess, async (req, res) => {
  *
  */
 // 2 -> 3
-router.patch("/resolve", verifyAdminAccess, async (req, res) => {
+router.patch("/resolve", verifyTokenWithWorker, async (req, res) => {
   const { error } = resolveComplaint(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -228,10 +230,27 @@ router.patch("/resolve", verifyAdminAccess, async (req, res) => {
       return res
         .status(405)
         .json({ message: "Complaint has already been resolved!!" });
-
+    
+    const token = req.header("auth-token");
+    const auth = jwt.verify(token, app_prop.TOKEN_SECRET);
+    const user = User.findOne({ forceNumber: auth.forceNumber });
+    if(!user) {
+      if(complaint.assignedTo != auth.forceNumber) {
+        return res.status(403).json({ message: "FORBIDDEN REQUEST" });
+      }
+    }
+    if(user.forceNumber != complaint.forceNumber) {
+      if(
+        user.designation != "SO" && 
+				user.designation != "IC" && 
+				user.designation != "DC"
+      ) {
+        return res.status(403).json({ message: "FORBIDDEN REQUEST" });
+      }
+    }
     const updatedComplaint = await Complaint.updateOne(
       { complaintNumber: req.body.complaintNumber },
-      { $set: { status: 3, resolutionDate: Date.now() } }
+      { $set: { status: 3, resolutionDate: Date.now(), closedBy: auth.forceNumber } }
     );
 
     return res
