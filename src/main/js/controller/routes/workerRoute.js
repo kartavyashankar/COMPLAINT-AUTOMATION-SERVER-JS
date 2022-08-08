@@ -2,11 +2,13 @@ const bcrypt = require("bcryptjs");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 
+const verifyAdminAccess = require("./verifications/verifyAdminAccess");
 const app_prop = require("../../../res/app-properties");
 const Worker = require("../../models/worker");
 const {
     workerRegisterValidation,
     loginValidation,
+    deleteUserOrWorker
   } = require("./validations/validate");
 
 const router = express.Router();
@@ -67,6 +69,23 @@ router.post("/register", async(req, res) => {
         });
     } catch (err) {
         return res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+    }
+});
+
+router.delete("/delete", verifyAdminAccess, async (req, res) => {
+    try {
+        const { error } = deleteUserOrWorker(req.query);
+        if(error) {
+            return res.status(400).json({ message: "Force Number not specified." });
+        }
+        const user = Worker.findOne({ forceNumber: req.query.forceNumber }); 
+        if (!user) {
+            return res.status(404).json({ message: "Worker doesn't exists!!" });
+        }
+        await Worker.deleteOne({ forceNumber: req.query.forceNumber });
+        return res.status(200).json({ message: "Deleted Worker Successfully" });
+    } catch (err) {
+        return res.status(500).json({ message: "INTERNAL_SERVER_ERROR" });
     }
 });
 
