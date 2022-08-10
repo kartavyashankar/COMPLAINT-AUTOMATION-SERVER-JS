@@ -205,10 +205,12 @@ router.delete("/delete", verifyAdminAccess, async (req, res) => {
     if(error) {
       return res.status(400).json({ message: "Force Number not specified." });
     }
-    const user = User.findOne({ forceNumber: req.query.forceNumber }); 
+    const user = await User.findOne({ forceNumber: req.query.forceNumber }); 
     if (!user) {
       return res.status(404).json({ message: "User doesn't exists!!" });
-    }
+    }    
+    console.log(req.query.forceNumber);
+    console.log(user);
     if(
         user.designation === "SO" || 
 				user.designation === "IC" || 

@@ -78,7 +78,7 @@ router.delete("/delete", verifyAdminAccess, async (req, res) => {
         if(error) {
             return res.status(400).json({ message: "Force Number not specified." });
         }
-        const user = Worker.findOne({ forceNumber: req.query.forceNumber }); 
+        const user = await Worker.findOne({ forceNumber: req.query.forceNumber }); 
         if (!user) {
             return res.status(404).json({ message: "Worker doesn't exists!!" });
         }

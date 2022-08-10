@@ -13,7 +13,7 @@ module.exports = async function (req, res, next) {
 		const user = await User.findOne({ forceNumber: verification.forceNumber });
 		if (user) next();
 		else {
-            const worker = Worker.findOne({ forceNumber: verification.forceNumber });
+            const worker = await Worker.findOne({ forceNumber: verification.forceNumber });
             if(worker) next();
             else {
 			    res.status(401).json({ message: "Access Denied!!" });

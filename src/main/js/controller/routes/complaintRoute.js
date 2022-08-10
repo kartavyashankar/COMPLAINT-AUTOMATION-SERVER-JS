@@ -234,7 +234,7 @@ router.patch("/resolve", verifyTokenWithWorker, async (req, res) => {
     
     const token = req.header("auth-token");
     const auth = jwt.verify(token, app_prop.TOKEN_SECRET);
-    const user = User.findOne({ forceNumber: auth.forceNumber });
+    const user = await User.findOne({ forceNumber: auth.forceNumber });
     if(!user) {
       if(complaint.assignedTo != auth.forceNumber) {
         return res.status(403).json({ message: "FORBIDDEN REQUEST" });
@@ -655,7 +655,7 @@ router.delete("/delete", verifyToken, async(req, res) => {
     if(error) {
       return res.status(400).json({ message: "Complaint Number not specified." });
     }
-    const complaint = Complaint.findOne({ complaintNUmber: req.query.complaintNumber });
+    const complaint = await Complaint.findOne({ complaintNUmber: req.query.complaintNumber });
     if(!complaint) {
       return res.status(404).json({ message: "Complaint Not Found" });
     } else if(complaint.status != 1) {
