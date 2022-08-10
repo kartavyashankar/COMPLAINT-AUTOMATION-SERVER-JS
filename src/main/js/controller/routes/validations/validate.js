@@ -62,6 +62,20 @@ const resolveComplaint = (data) => {
 	return validSchema.validate(data);
 };
 
+const deleteComplaint = (data) => {
+	const validSchema = Joi.object({
+		complaintNumber: Joi.number().positive().required()
+	});
+	return validSchema.validate(data);
+};
+
+const deleteUserOrWorker = (data) => {
+	const validSchema = Joi.object({
+		forceNumber: Joi.string().required()
+	});
+	return validSchema.validate(data);
+};
+
 module.exports = {
 	userRegisterValidation: userRegisterValidation,
     loginValidation: loginValidation,
@@ -69,5 +83,7 @@ module.exports = {
 	authComplaint: authComplaint,
 	rejectComplaint: rejectComplaint,
 	resolveComplaint: resolveComplaint,
-	workerRegisterValidation: workerRegisterValidation
+	workerRegisterValidation: workerRegisterValidation, 
+	deleteComplaint: deleteComplaint,
+	deleteUserOrWorker: deleteUserOrWorker
 };

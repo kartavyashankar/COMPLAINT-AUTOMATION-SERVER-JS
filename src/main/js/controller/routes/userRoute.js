@@ -7,6 +7,7 @@ const app_prop = require("../../../res/app-properties");
 const {
   userRegisterValidation,
   loginValidation,
+  deleteUserOrWorker
 } = require("./validations/validate");
 
 const bcrypt = require("bcryptjs");
@@ -200,11 +201,22 @@ router.post("/login", async (req, res) => {
 
 router.delete("/delete", verifyAdminAccess, async (req, res) => {
   try {
+    const { error } = deleteUserOrWorker(req.query);
+    if(error) {
+      return res.status(400).json({ message: "Force Number not specified." });
+    }
     const user = User.findOne({ forceNumber: req.query.forceNumber }); 
     if (!user) {
       return res.status(404).json({ message: "User doesn't exists!!" });
     }
-    User.deleteOne({ forceNumber: req.query.forceNumber });
+    if(
+        user.designation === "SO" || 
+				user.designation === "IC" || 
+				user.designation === "DC"
+      ) {
+        return res.status(403).json({ message: "Admin cannot be deleted" });
+    }
+    await User.deleteOne({ forceNumber: req.query.forceNumber });
     return res.status(200).json({ message: "Deleted User Successfully" });
   } catch (err) {
     return res.status(500).json({ message: "INTERNAL_SERVER_ERROR" });

@@ -14,6 +14,7 @@ const {
   authComplaint,
   rejectComplaint,
   resolveComplaint,
+  deleteComplaint
 } = require("./validations/validate");
 
 
@@ -645,6 +646,30 @@ router.get("/active", verifyToken, async (req, res) => {
     return res.status(200).json(complaints);
   } catch (err) {
     return res.status(500).json({ message: err });
+  }
+});
+
+router.delete("/delete", verifyToken, async(req, res) => {
+  try {
+    const { error } = deleteComplaint(req.query);
+    if(error) {
+      return res.status(400).json({ message: "Complaint Number not specified." });
+    }
+    const complaint = Complaint.findOne({ complaintNUmber: req.query.complaintNumber });
+    if(!complaint) {
+      return res.status(404).json({ message: "Complaint Not Found" });
+    } else if(complaint.status != 1) {
+      return res.status(405).json({ message: "Complaint cannot be deleted" });
+    }
+    const token = req.header("auth-token");
+    const auth = jwt.verify(token, app_prop.TOKEN_SECRET);
+    if(auth.forceNumber != complaint.forceNumber) {
+      return res.status(403).json({ message: "Forbidden Request" });
+    }
+    await Complaint.deleteOne({ complaintNumber: req.query.complaintNumber });
+    res.status(200).json({ message: "Complaint Deleted Successfully" });
+  } catch (err) {
+    return res.status(500).json({ message: "INTERNAL SERVER ERROR" });
   }
 });
 
