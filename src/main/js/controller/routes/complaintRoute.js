@@ -118,10 +118,17 @@ router.patch("/authorize", verifyAdminAccess, async (req, res) => {
         .status(405)
         .json({ message: "Complaint has been resolved!!" });
     }
-
+    const workerList = await Worker.find({ category: complaint.category, isActive: 1 }).sort({ lastAssgined: 1 }).limit(1);
+    const worker = workerList[0];
+    const jobs = worker.assignedJobs;
+    jobs.push(complaint.complaintNumber);
+    const updatedWorker = await Worker.updateOne(
+      { forceNumber: worker.forceNumber },
+      { $set: { assignedJobs: jobs, lastAssgined: Date.now } }
+    );
     const updatedComplaint = await Complaint.updateOne(
       { complaintNumber: req.body.complaintNumber },
-      { $set: { status: 2 } }
+      { $set: { status: 2, assignedTo: worker.forceNumber } }
     );
 
     return res
@@ -249,6 +256,22 @@ router.patch("/resolve", verifyTokenWithWorker, async (req, res) => {
         return res.status(403).json({ message: "FORBIDDEN REQUEST" });
       }
     }
+    const worker = await Worker.findOne({ forceNumber: complaint.assignedTo });
+    if(worker) {
+      const jobs = worker.assignedJobs;
+      const index = jobs.indexOf(complaintNumber);
+      if(index > -1) {
+        jobs.splice(index, 1);
+      }
+      const updatedWorker = await Worker.updateOne(
+        { forceNumber: worker.forceNumber },
+        {
+          $set: {
+            assignedJobs: jobs
+          }
+        }
+      );
+    }
     const updatedComplaint = await Complaint.updateOne(
       { complaintNumber: req.body.complaintNumber },
       { $set: { status: 3, resolutionDate: Date.now(), closedBy: auth.forceNumber } }
@@ -361,7 +384,22 @@ router.patch("/reject", verifyAdminAccess, async (req, res) => {
         .status(405)
         .json({ message: "Complaint has already been rejected!!" });
     }
-
+    const worker = await Worker.findOne({ forceNumber: complaint.assignedTo });
+    if(worker) {
+      const jobs = worker.assignedJobs;
+      const index = jobs.indexOf(complaintNumber);
+      if(index > -1) {
+        jobs.splice(index, 1);
+      }
+      const updatedWorker = await Worker.updateOne(
+        { forceNumber: worker.forceNumber },
+        {
+          $set: {
+            assignedJobs: jobs
+          }
+        }
+      );
+    }
     const updatedComplaint = await Complaint.updateOne(
       { complaintNumber: req.body.complaintNumber },
       { $set: { status: 0 } }
@@ -655,7 +693,7 @@ router.delete("/delete", verifyToken, async(req, res) => {
     if(error) {
       return res.status(400).json({ message: "Complaint Number not specified." });
     }
-    const complaint = await Complaint.findOne({ complaintNUmber: req.query.complaintNumber });
+    const complaint = await Complaint.findOne({ complaintNumber: req.query.complaintNumber });
     if(!complaint) {
       return res.status(404).json({ message: "Complaint Not Found" });
     } else if(complaint.status != 1) {
