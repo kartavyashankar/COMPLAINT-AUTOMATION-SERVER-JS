@@ -23,6 +23,7 @@ const workerRegisterValidation = (data) => {
 		quarterType: Joi.number().required(),
 		quarterNumber: Joi.number().required()
 	});
+	return validSchema.validate(data);
 };
 
 const loginValidation = (data) => {

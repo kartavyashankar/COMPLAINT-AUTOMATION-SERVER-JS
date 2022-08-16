@@ -124,7 +124,7 @@ router.patch("/authorize", verifyAdminAccess, async (req, res) => {
     jobs.push(complaint.complaintNumber);
     const updatedWorker = await Worker.updateOne(
       { forceNumber: worker.forceNumber },
-      { $set: { assignedJobs: jobs, lastAssgined: Date.now } }
+      { $set: { assignedJobs: jobs, lastAssgined: Date.now() } }
     );
     const updatedComplaint = await Complaint.updateOne(
       { complaintNumber: req.body.complaintNumber },
@@ -259,7 +259,7 @@ router.patch("/resolve", verifyTokenWithWorker, async (req, res) => {
     const worker = await Worker.findOne({ forceNumber: complaint.assignedTo });
     if(worker) {
       const jobs = worker.assignedJobs;
-      const index = jobs.indexOf(complaintNumber);
+      const index = jobs.indexOf(complaint.complaintNumber);
       if(index > -1) {
         jobs.splice(index, 1);
       }
@@ -281,7 +281,8 @@ router.patch("/resolve", verifyTokenWithWorker, async (req, res) => {
       .status(200)
       .json({ message: "Complaint Resolved Successfully!!" });
   } catch (err) {
-    return res.status(500).json({ message: err });
+    console.log(err);
+    return res.status(500).json({ message: "INTERNAL SERVER ERROR" });
   }
 });
 

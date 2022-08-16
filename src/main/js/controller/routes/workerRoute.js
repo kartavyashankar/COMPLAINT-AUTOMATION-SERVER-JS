@@ -59,6 +59,8 @@ router.post("/register", async(req, res) => {
             category: req.body.category,
             quarterType: req.body.quarterType,
             quarterNumber: req.body.quarterNumber,
+            assignedJobs: [],
+            lastAssigned: 0
         });
         const saveWorker = await worker.save();
         if(!saveWorker) {
@@ -68,6 +70,7 @@ router.post("/register", async(req, res) => {
             message: "Successfully Registered!!",
         });
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ message: "INTERNAL SERVER ERROR" });
     }
 });

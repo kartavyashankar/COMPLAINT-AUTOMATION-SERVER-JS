@@ -33,11 +33,12 @@ const workerSchema = mongoose.Schema({
     },
     assignedJobs: {
         type: [Number],
-        default: []
+        default: [],
+        required: true
     },
     lastAssigned: {
-        type: Date,
-        default: Date.min
+        type: Number,
+        required: true,
     },
     isActive: {
         type: Number,
